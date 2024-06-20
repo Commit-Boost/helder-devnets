@@ -1,12 +1,13 @@
 ansible_user: devops
 ansible_python_interpreter: /usr/bin/python3
-devnet_name: template
+devnet_name: helder-devnet-0
 
 # IPv6 Specific configuration
-global_ipv6_enabled: true
+global_ipv6_enabled: false
 global_ipv6_subnet_ranges:
   hetzner: "64"
   digitalocean: "124"
+  unknown: "64"
 
 ######################################################
 ##
@@ -15,7 +16,7 @@ global_ipv6_subnet_ranges:
 ######################################################
 
 # role: ethpandaops.general.bootstrap
-bootstrap_user: root
+bootstrap_user: ubuntu
 bootstrap_default_user_authorized_keys_github:
   - barnabasbusa
   - parithosh

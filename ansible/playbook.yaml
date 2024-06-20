@@ -26,10 +26,6 @@
       tags: [init-server, docker_network]
     - role: ethpandaops.general.node_exporter
       tags: [init-server, node_exporter]
-    - role: ethpandaops.general.prometheus
-      tags: [init-server, prometheus]
-    - role: ethpandaops.general.vector
-      tags: [init-server, vector]
 
 - hosts: bootnode
   become: true
@@ -40,10 +36,6 @@
       tags: [ethereum, eth_testnet_config, ethereum_testnet_config]
     - role: ethpandaops.general.ethereum_node
       tags: [ethereum, ethereum_node]
-    - role: ethpandaops.general.docker_nginx_proxy
-      tags: [docker_nginx_proxy]
-    - role: ethpandaops.general.generate_basic_auth_nginx
-      tags: [docker_nginx_proxy]
 
 - hosts: ethereum_node
   serial: "{{ batch_count | default('100%') }}"
@@ -56,10 +48,6 @@
       tags: [ethereum, validator_keys]
     - role: ethpandaops.general.ethereum_node
       tags: [ethereum, ethereum_node]
-    - role: ethpandaops.general.docker_nginx_proxy
-      tags: [docker_nginx_proxy]
-    - role: ethpandaops.general.generate_basic_auth_nginx
-      tags: [docker_nginx_proxy]
   post_tasks:
     - name: Wait between runs
       tags: [ethereum, ethereum_node]
@@ -88,5 +76,3 @@
   roles:
     - role: ethpandaops.general.ethereum_post_network_setup
       tags: [eth_post_network_setup, ethereum_post_network_setup]
-    - role: ethpandaops.general.generate_kubernetes_config
-      tags: [gen_kubernetes_config, generate_kubernetes_config]

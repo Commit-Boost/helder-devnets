@@ -1,19 +1,9 @@
 default_ethereum_client_images:
 ### Consensus layer clients
   lighthouse: sigp/lighthouse:latest
-  lodestar: chainsafe/lodestar:latest
-  nimbus: statusim/nimbus-eth2:multiarch-latest
-  prysm: gcr.io/prysmaticlabs/prysm/beacon-chain:latest
-  prysm_validator: gcr.io/prysmaticlabs/prysm/validator:latest
-  teku: consensys/teku:latest
-  grandine: ethpandaops/grandine:develop
 ### Execution layer clients
-  besu: hyperledger/besu:latest
   geth: ethereum/client-go:stable
-  erigon: thorax/erigon:devel
-  ethereumjs: ethpandaops/ethereumjs:master
-  nethermind: nethermindeth/nethermind:master
-  reth: ethpandaops/reth:main
+
 
 
 default_tooling_images:
@@ -34,7 +24,7 @@ default_tooling_images:
   blobscan_indexer: blossomlabs/blobscan-indexer:latest
   dora: ethpandaops/dora:master
   dugtrio: ethpandaops/dugtrio:latest
-  ethereum_genesis_generator: ethpandaops/ethereum-genesis-generator:3.2.1
+  ethereum_genesis_generator: ethpandaops/ethereum-genesis-generator:3.3.0
   mev_boost: flashbots/mev-boost:latest
   mev_relay: flashbots/mev-boost-relay:latest
   mev_builder: flashbots/mev-builder:latest
