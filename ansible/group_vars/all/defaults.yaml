@@ -38,7 +38,11 @@ fail2ban_ignoreips:
 # role: ethpandaops.general.docker_network
 docker_network_name: shared
 docker_network_enable_ipv6: "{{ global_ipv6_enabled  }}"
-docker_network_ipam_config: []
+docker_network_ipam_config: >-
+   {{ global_ipv6_enabled | default(false) | ternary(
+     [ { 'subnet': ansible_default_ipv6.address | default('::1') | ansible.utils.ipsubnet(global_ipv6_subnet_ranges[hostvars[inventory_hostname]['cloud']]) } ]
+     , [])
+   }}
 
 docker_networks_shared:
   - name: "{{ docker_network_name }}"
