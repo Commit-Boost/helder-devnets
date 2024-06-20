@@ -1,6 +1,6 @@
 ansible_user: devops
 ansible_python_interpreter: /usr/bin/python3
-devnet_name: helder-devnet-0
+devnet_name: helder
 
 # IPv6 Specific configuration
 global_ipv6_enabled: false
@@ -37,12 +37,8 @@ fail2ban_ignoreips:
 
 # role: ethpandaops.general.docker_network
 docker_network_name: shared
-docker_network_enable_ipv6: "{{ global_ipv6_enabled }}"
-docker_network_ipam_config: >-
-  {{ global_ipv6_enabled | ternary(
-    [ { 'subnet': ansible_default_ipv6.address | ansible.utils.ipsubnet(global_ipv6_subnet_ranges[hostvars[inventory_hostname]['cloud']]) } ]
-    , [])
-  }}
+docker_network_enable_ipv6: "{{ global_ipv6_enabled  }}"
+docker_network_ipam_config: []
 
 docker_networks_shared:
   - name: "{{ docker_network_name }}"
