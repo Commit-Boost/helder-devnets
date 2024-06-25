@@ -5,8 +5,8 @@ tx_fuzz_blobs_container_name: tx_fuzz_blobs
 tx_fuzz_blobs_container_command:
   - blobs
   - --no-al
-  - --rpc=https://rpc.bootnode-1.{{ network_subdomain }}
+  - --rpc=http://rpc.helder-devnets.xyz
   - --sk={{ tx_fuzz_blobs_privkey }}
-  - --txcount=10
+  - --txcount=2
 
 tx_fuzz_container_networks: "{{ docker_networks_shared }}"

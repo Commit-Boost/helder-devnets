@@ -4,7 +4,7 @@ tx_fuzz_txs_container_name: tx_fuzz_txs
 tx_fuzz_txs_container_command:
   - spam
   - --no-al
-  - --rpc=https://rpc.bootnode-1.{{ network_subdomain }}
+  - --rpc=http://rpc.helder-devnets.xyz
   - --sk={{ tx_fuzz_txs_privkey }}
 
 
