@@ -76,3 +76,9 @@
   roles:
     - role: ethpandaops.general.ethereum_post_network_setup
       tags: [eth_post_network_setup, ethereum_post_network_setup]
+
+- hosts: lighthouse-geth-1,bootnode-1
+  become: true
+  roles:
+    - role: ethpandaops.general.docker_nginx_proxy
+      tags: [ docker_nginx_proxy ]

@@ -1,0 +1,165 @@
+# explorer config
+dora_beaconapi_endpoints:
+  - name: lighthouse-geth-1
+    url: "http://beacon:5052"
+    archive: false
+    priority: 0
+    headers: {}
+  - name: bootnode
+    url: "http://bn.bootnode.helder-devnets.xyz"
+    archive: false
+    priority: 0
+    headers: {}
+
+
+dora_executionapi_endpoints:
+  - name: lighthouse-geth-1
+    url: "http://execution:8545"
+    archive: false
+    priority: 0
+    headers: {}
+
+
+dora_mev_relays: []
+# - index: 0
+#   name: "Relay 1"
+#   url: "http://mev-relay/"
+
+dora_chain_name: helder-devnet-0
+dora_chain_displayname: "helder-devnet-0"
+dora_chain_config: "https://raw.githubusercontent.com/Commit-Boost/helder-devnets/master/network-configs/devnet-0/metadata/config.yaml"
+dora_chain_genesistime: 1718967660
+dora_frontend_title: "Dora the Explorer"
+dora_frontend_subtitle: "helder-devnet-0"
+dora_frontend_ethexplorer: ""
+dora_frontend_validatornames: ""
+dora_frontend_validatornames_inventory: ""
+
+
+# ------------------------------------------------------------------
+
+# dora
+dora_enabled: true
+dora_container_name: dora
+dora_container_image: ethpandaops/dora:master
+dora_container_env:
+  VIRTUAL_HOST: "dora.helder-devnets.xyz"
+  VIRTUAL_PORT: "8080"
+  LETSENCRYPT_HOST: "dora.helder-devnets.xyz"
+dora_container_ports:
+  - "8080:8080"
+dora_container_volumes:
+  - "{{ dora_datadir }}/explorer:/config"
+dora_container_stop_timeout: "600"
+dora_container_pull: true
+dora_container_networks: "{{ dora_docker_networks }}"
+dora_container_command: -config=/config/explorer.yaml
+
+# dora-database
+dora_db_enabled: true
+dora_db_datadir: "{{ dora_datadir }}/database"
+dora_db_container_name: dora-database
+dora_db_container_image: bitnami/postgresql:15
+dora_db_container_env:
+  POSTGRESQL_USERNAME: postgres
+  POSTGRESQL_PASSWORD: postgres
+  POSTGRESQL_DATABASE: dora
+dora_db_custom_postgres_config: |
+  max_connections = 1024
+dora_db_container_ports: []
+dora_db_container_volumes:
+  - "{{ dora_db_datadir }}/db:/bitnami/postgresql"
+  - "{{ dora_db_datadir }}/conf.d://opt/bitnami/postgresql/conf/conf.d:ro"
+dora_db_container_stop_timeout: "300"
+dora_db_container_pull: false
+dora_db_container_networks: "{{ dora_docker_networks }}"
+
+dora_config: |
+  # Chain network configuration
+  chain:
+    name: "{{ dora_chain_name }}"
+    genesisTimestamp: {{ dora_chain_genesistime }}
+    configPath: "{{ dora_chain_config }}"
+    displayName: "{{ dora_chain_displayname }}"
+
+  # HTTP Server configuration
+  server:
+    host: "0.0.0.0" # Address to listen on
+    port: "8080" # Port to listen on
+
+  frontend:
+    enabled: true # Enable or disable to web frontend
+    debug: false
+    minimize: false # minimize html templates
+
+    # Name of the site, displayed in the title tag
+    siteName: "{{ dora_frontend_title }}"
+    siteSubtitle: "{{ dora_frontend_subtitle }}"
+
+    # link to EL Explorer
+    ethExplorerLink: "{{ dora_frontend_ethexplorer }}"
+
+    # file or inventory url to load validator names from
+    validatorNamesYaml: "{{ dora_frontend_validatornames }}"
+    validatorNamesInventory: "{{ dora_frontend_validatornames_inventory }}"
+
+  rateLimit:
+    enabled: true
+    proxyCount: {{ dora_proxy_count }}
+    rate: {{ dora_callrate_limit }}
+    burst: {{ dora_callrate_burst }}
+
+  beaconapi:
+    # CL Client RPC
+    endpoints:
+
+    {% for endpoint in dora_beaconapi_endpoints %}
+    - {{ endpoint | to_json }}
+    {% endfor %}
+
+    # local cache for page models
+    localCacheSize: 100 # 100MB
+
+    # remote cache for page models
+    redisCacheAddr: ""
+    redisCachePrefix: ""
+
+  executionapi:
+    # EL Client RPC
+    endpoints: {% if not dora_executionapi_endpoints %}[]{% endif %}
+
+    {% for endpoint in dora_executionapi_endpoints %}
+    - {{ endpoint | to_json }}
+    {% endfor %}
+
+    depositLogBatchSize: 10000
+
+  # indexer keeps track of the latest epochs in memory.
+  indexer:
+    # max number of epochs to keep in memory
+    inMemoryEpochs: 10
+
+    # disable synchronizing and everything that writes to the db (indexer just maintains local cache)
+    disableIndexWriter: false
+
+    # number of seconds to wait between each epoch (don't overload CL client)
+    syncEpochCooldown: 1
+
+  mevIndexer:
+    # list of mev relays to crawl mev blocks from
+    relays: {% if not dora_mev_relays %}[]{% endif %}
+
+    {% for relay in dora_mev_relays %}
+    - {{ relay | to_json }}
+    {% endfor %}
+
+    refreshInterval: 5m
+
+  database:
+    engine: "pgsql"
+    pgsql:
+      host: "dora-database"
+      port: 5432
+      user: "postgres"
+      password: "postgres"
+      name: "dora"
