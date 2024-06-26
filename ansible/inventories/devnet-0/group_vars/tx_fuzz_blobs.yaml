@@ -5,7 +5,7 @@ tx_fuzz_blobs_container_name: tx_fuzz_blobs
 tx_fuzz_blobs_container_command:
   - blobs
   - --no-al
-  - --rpc=http://rpc.helder-devnets.xyz
+  - --rpc=https://rpc.helder-devnets.xyz
   - --sk={{ tx_fuzz_blobs_privkey }}
   - --txcount=2
 
