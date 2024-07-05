@@ -109,3 +109,8 @@
     - role: ethpandaops.general.mev_flood
       tags: [mev_flood]
 
+- hosts: blockscout
+  become: true
+  roles:
+  - role: blockscout
+    tags: [blockscout]

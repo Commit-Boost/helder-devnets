@@ -1,0 +1,4 @@
+blockscout_additional_envs:
+  VIRTUAL_HOST: "blockscout.helder-devnets.xyz"
+  VIRTUAL_PORT: "4000"
+  LETSENCRYPT_HOST: "blockscout.helder-devnets.xyz"
