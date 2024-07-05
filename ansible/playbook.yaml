@@ -81,7 +81,7 @@
   become: true
   roles:
     - role: ethpandaops.general.docker_nginx_proxy
-      tags: [ docker_nginx_proxy ]
+      tags: [docker_nginx_proxy]
 
 - hosts: tx_fuzz_blobs
   become: true
@@ -112,5 +112,5 @@
 - hosts: blockscout
   become: true
   roles:
-  - role: blockscout
-    tags: [blockscout]
+    - role: blockscout
+      tags: [blockscout]
