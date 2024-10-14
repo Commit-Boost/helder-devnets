@@ -1,0 +1,13 @@
+geth_container_command_extra_args:
+  - --http.api=eth,net,web3,debug,admin
+  - --http.vhosts=*
+  - --http.corsdomain=*
+  - --ws
+  - --ws.addr=0.0.0.0
+  - --ws.api=eth,net,web3,debug
+  - --ws.port={{ geth_ports_ws_rpc }}
+  - --ws.origins=*
+  - --networkid={{ ethereum_network_id }}
+  - --syncmode=full
+  - --bootnodes={{ ethereum_el_bootnodes | join(',') }}
+  - --ethstats={{ inventory_hostname }}:{{ ethstats_secret }}@{{ ethstats_url }}
